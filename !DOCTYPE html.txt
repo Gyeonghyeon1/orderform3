@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>품목 계산기</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+    }
+    input {
+      width: 80px;
+      text-align: center;
+    }
+    button {
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+    #totalSum {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h2>품목 계산기</h2>
+
+<table id="matrix">
+  <thead>
+    <tr>
+      <th>품목명</th>
+      <th>항목 A 수량</th>
+      <th>항목 B 수량</th>
+      <th>항목 C 수량</th>
+      <th>소계</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr data-name="전선">
+      <td>전선</td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+    <tr data-name="콘센트">
+      <td>콘센트</td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td><input type="number" value="0" onchange="calculateMatrix()" /></td>
+      <td class="subtotal">0</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>총합: <span id="totalSum">0</span> 원</h3>
+
+<script>
+  const unitPrices = {
+    "전선": 1200,
+    "콘센트": 4500,
+    "스위치": 3000,
+    // 여기에 다른 품목과 가격 추가 가능
+  };
+
+  function calculateMatrix() {
+    let total = 0;
+    const rows = document.querySelectorAll("#matrix tbody tr");
+
+    rows.forEach(row => {
+      const itemName = row.dataset.name;
+      const unitPrice = unitPrices[itemName];
+      let rowSum = 0;
+
+      const qtyInputs = row.querySelectorAll("input");
+      qtyInputs.forEach(input => {
+        const qty = parseFloat(input.value) || 0;
+        rowSum += qty * unitPrice;
+      });
+
+      row.querySelector(".subtotal").textContent = rowSum.toLocaleString();
+      total += rowSum;
+    });
+
+    document.getElementById("totalSum").textContent = total.toLocaleString();
+  }
+</script>
+
+</body>
+</html>
